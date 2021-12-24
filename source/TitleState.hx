@@ -196,14 +196,14 @@ class TitleState extends MusicBeatState
 		// bg.updateHitbox();
 		add(bg);
 
-		logoBl = new FlxSprite(-150, -100);
+		logoBl = new FlxSprite(200, 19);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 		logoBl.antialiasing = ClientPrefs.globalAntialiasing;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
 		// logoBl.screenCenter();
-		// logoBl.color = FlxColor.BLACK;
+		// logoBl.color = FlxColor.RED;
 
 		swagShader = new ColorSwap();
 		if(!FlxG.save.data.psykaEasterEgg || !easterEggEnabled) {
@@ -408,127 +408,3 @@ class TitleState extends MusicBeatState
 			if(controls.UI_LEFT) swagShader.hue -= elapsed * 0.1;
 			if(controls.UI_RIGHT) swagShader.hue += elapsed * 0.1;
 		}
-
-		super.update(elapsed);
-	}
-
-	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
-	{
-		for (i in 0...textArray.length)
-		{
-			var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
-			money.screenCenter(X);
-			money.y += (i * 60) + 200 + offset;
-			credGroup.add(money);
-			textGroup.add(money);
-		}
-	}
-
-	function addMoreText(text:String, ?offset:Float = 0)
-	{
-		if(textGroup != null) {
-			var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
-			coolText.screenCenter(X);
-			coolText.y += (textGroup.length * 60) + 200 + offset;
-			credGroup.add(coolText);
-			textGroup.add(coolText);
-		}
-	}
-
-	function deleteCoolText()
-	{
-		while (textGroup.members.length > 0)
-		{
-			credGroup.remove(textGroup.members[0], true);
-			textGroup.remove(textGroup.members[0], true);
-		}
-	}
-
-	private var sickBeats:Int = 0; //Basically curBeat but won't be skipped if you hold the tab or resize the screen
-	private static var closedState:Bool = false;
-	override function beatHit()
-	{
-		super.beatHit();
-
-		if(logoBl != null) 
-			logoBl.animation.play('bump');
-
-		if(gfDance != null) {
-			danceLeft = !danceLeft;
-
-			if (danceLeft)
-				gfDance.animation.play('danceRight');
-			else
-				gfDance.animation.play('danceLeft');
-		}
-
-		if(!closedState) {
-			sickBeats++;
-			switch (sickBeats)
-			{
-				case 1:
-					createCoolText(['Psych Engine by'], 45);
-				// credTextShit.visible = true;
-				case 3:
-					addMoreText('Shadow Mario', 45);
-					addMoreText('RiverOaken', 45);
-				// credTextShit.text += '\npresent...';
-				// credTextShit.addText();
-				case 4:
-					deleteCoolText();
-				// credTextShit.visible = false;
-				// credTextShit.text = 'In association \nwith';
-				// credTextShit.screenCenter();
-				case 5:
-					createCoolText(['This is a mod to'], -60);
-				case 7:
-					addMoreText('This game right below lol', -60);
-					logoSpr.visible = true;
-				// credTextShit.text += '\nNewgrounds';
-				case 8:
-					deleteCoolText();
-					logoSpr.visible = false;
-				// credTextShit.visible = false;
-
-				// credTextShit.text = 'Shoutouts Tom Fulp';
-				// credTextShit.screenCenter();
-				case 9:
-					createCoolText([curWacky[0]]);
-				// credTextShit.visible = true;
-				case 11:
-					addMoreText(curWacky[1]);
-				// credTextShit.text += '\nlmao';
-				case 12:
-					deleteCoolText();
-				// credTextShit.visible = false;
-				// credTextShit.text = "Friday";
-				// credTextShit.screenCenter();
-				case 13:
-					addMoreText('Friday');
-				// credTextShit.visible = true;
-				case 14:
-					addMoreText('Night');
-				// credTextShit.text += '\nNight';
-				case 15:
-					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
-
-				case 16:
-					skipIntro();
-			}
-		}
-	}
-
-	var skippedIntro:Bool = false;
-
-	function skipIntro():Void
-	{
-		if (!skippedIntro)
-		{
-			remove(logoSpr);
-
-			FlxG.camera.flash(FlxColor.WHITE, 4);
-			remove(credGroup);
-			skippedIntro = true;
-		}
-	}
-}
